@@ -1,0 +1,281 @@
+/* Shared finish layer. Surfaces, color and motion use one set of tokens. */
+.app-shell {
+  --canvas:#f3f6fa;
+  --canvas-end:#eef2f7;
+  --surface:#ffffff;
+  --surface-raised:#f8fafd;
+  --surface-input:#f8fafc;
+  --text:#263449;
+  --muted:#65748a;
+  --line:#dfe6ef;
+  --accent:#087c67;
+  --accent-dark:#066452;
+  --accent-rgb:8,124,103;
+  --accent-soft:#e8f5ef;
+  --accent-strong:#bddfd1;
+  --card-shadow:0 3px 14px #26394e04,0 1px 2px #26394e03;
+  --ease-out:cubic-bezier(.2,.75,.25,1);
+  color:var(--text);
+  background:var(--canvas);
+}
+.app-shell.theme-quota {--accent:#7957be;--accent-dark:#65449f;--accent-rgb:121,87,190;--accent-soft:#f0ebf9;--accent-strong:#d7c8ec}
+.app-shell.theme-team {--canvas:#f1f5fa;--canvas-end:#eaf0f7;--accent:#266b87;--accent-dark:#1b536c;--accent-rgb:38,107,135;--accent-soft:#e8f2f8;--accent-strong:#bfd8e5}
+.app-shell.theme-storage {--accent:#99591f;--accent-dark:#7d4618;--accent-rgb:153,89,31;--accent-soft:#f6eee4;--accent-strong:#dfc9ad}
+.app-shell.dark-mode.theme-storage {--accent:#e5bd88;--accent-dark:#cfaa78;--accent-rgb:229,189,136;--accent-soft:#3c3024;--accent-strong:#65503a}
+.app-shell.theme-storage .storage-cloud {--accent:#3f65b5;--accent-dark:#325295;--accent-rgb:63,101,181;--accent-soft:#eaf0fb;--accent-strong:#c3d1ec}
+.app-shell.dark-mode.theme-storage .storage-cloud {--accent:#acbef4;--accent-dark:#95a9df;--accent-rgb:172,190,244;--accent-soft:#2a354d;--accent-strong:#485b83}
+.app-shell.dark-mode.theme-storage .btn.primary {color:#242431}
+.app-shell .nav-item.storage-nav.active {background:#493626;color:#efcba0;box-shadow:inset 0 0 0 1px #69513a}
+.app-shell .nav-item.storage-nav.active::after {background:#efcba0}
+.app-shell .directory-return {padding:9px 12px;white-space:nowrap}
+@media(max-width:1200px){.app-shell .directory-return>span{display:none}.app-shell .directory-return{padding:9px}.app-shell .header-actions{gap:8px}}
+.app-shell.dark-mode {
+  --canvas:#111a27;
+  --canvas-end:#101823;
+  --surface:#192434;
+  --surface-raised:#1d2a3c;
+  --surface-input:#141f2e;
+  --text:#e0e8f3;
+  --muted:#9baac0;
+  --line:#2b394e;
+  --accent:#80cdb9;
+  --accent-dark:#68b49f;
+  --accent-rgb:128,205,185;
+  --accent-soft:#213c37;
+  --accent-strong:#375a51;
+  --card-shadow:0 5px 20px #040b140e,inset 0 1px #dce9ff03;
+}
+.app-shell.dark-mode.theme-quota {--accent:#baa4e3;--accent-dark:#a68dcc;--accent-rgb:186,164,227;--accent-soft:#352d46;--accent-strong:#514261}
+.app-shell.dark-mode.theme-team {--canvas:#101b2c;--canvas-end:#101927;--surface:#18273a;--surface-raised:#1d2e43;--surface-input:#132135;--accent:#83bedc;--accent-dark:#6aa5c5;--accent-rgb:131,190,220;--accent-soft:#23394c;--accent-strong:#3c5d75}
+
+/* Background stays quiet behind live data; illumination belongs to the hero. */
+.app-shell .main-workspace {
+  background:radial-gradient(ellipse 750px 460px at 100% -90px,rgba(var(--accent-rgb),.065),transparent 76%),linear-gradient(180deg,var(--canvas),var(--canvas-end));
+}
+.app-shell .main-workspace::before {background:radial-gradient(540px circle at var(--pointer-x,75vw) var(--pointer-y,35vh),rgba(var(--accent-rgb),.018),transparent 76%)}
+.app-shell .titlebar {background:var(--canvas);color:var(--muted);border-bottom:1px solid rgba(var(--accent-rgb),.055)}
+.app-shell .titlebar-caption {color:var(--text);font-weight:550}
+.app-shell .sidebar {background:radial-gradient(ellipse 350px 420px at -70% 85%,#2d685b17,transparent 80%),linear-gradient(180deg,#14212a,#111d26);border-right:1px solid #253440}
+.app-shell .brand strong {font-weight:650;letter-spacing:-1px}
+.app-shell .brand-mark {background:linear-gradient(145deg,#28493f,#1d3533);border:1px solid #45645955;box-shadow:inset 0 1px #cbf5e10c}
+.app-shell .sidebar-section {font-size:10px;color:#8396a5;letter-spacing:.12em}
+.app-shell .nav-item {color:#a5b5c2;transition:background .2s,color .2s,box-shadow .2s,transform .18s}
+.app-shell .nav-item:hover {background:#24333f;color:#edf5fa}
+.app-shell .nav-item.active {background:linear-gradient(105deg,#2b4a42,#223b37);color:#bfebdd;box-shadow:inset 0 0 0 1px #4f73645c}
+.app-shell .nav-item.quota-nav.active {background:linear-gradient(105deg,#433954,#322b43);color:#e0d1f6;box-shadow:inset 0 0 0 1px #7c67915c}
+.app-shell .nav-item.team-nav {color:#a1bdcf}
+.app-shell .nav-item.team-nav.active {background:linear-gradient(105deg,#28465d,#21384d);color:#c3e4f5;box-shadow:inset 0 0 0 1px #648da85c}
+.app-shell .nav-item.active::after {content:'';position:absolute;left:0;top:30%;bottom:30%;width:2px;border-radius:2px;background:#9ad8bf}
+.app-shell .nav-item.quota-nav.active::after {background:#d0b6f0}
+.app-shell .nav-item.team-nav.active::after {background:#95ceeb}
+.app-shell.theme-team .team-space-heading {background:radial-gradient(ellipse at 95% 5%,rgba(var(--accent-rgb),.09),transparent 65%),linear-gradient(120deg,var(--accent-soft),var(--surface));border-color:var(--accent-strong)}
+.app-shell .sidebar-note {background:linear-gradient(145deg,#203639,#1a2a34);border-color:#31484d;box-shadow:inset 0 1px #c5f3df04}
+.app-shell .sidebar-note p {color:#9aafbb}
+.app-shell .workspace-header h1 {color:var(--text);font-weight:650;letter-spacing:-.035em}
+.app-shell .workspace-header p,.app-shell .breadcrumb,.app-shell .breadcrumb span {color:var(--muted)}
+.app-shell .connection-badge {color:var(--muted);font-size:10px}
+.app-shell .connection-badge i.online {background:#46ac90;box-shadow:0 0 0 3px #46ac9016}
+.app-shell .workspace-page {gap:24px;padding-bottom:2px}
+
+/* Typography and stable surfaces. Hover never displaces a data panel. */
+.app-shell .panel,.app-shell .metric-card,.app-shell .service-card {
+  background:var(--surface);
+  border-color:var(--line);
+  box-shadow:var(--card-shadow);
+  transition:background-color .28s,border-color .2s,box-shadow .2s;
+}
+.app-shell .panel {border-radius:16px}
+.app-shell .metric-card,.app-shell .service-card {border-radius:13px}
+.app-shell .panel::after {background:radial-gradient(280px circle at var(--hover-x,50%) var(--hover-y,50%),rgba(var(--accent-rgb),.025),transparent 76%)}
+.app-shell .team-pie-panel::after {display:none}
+.app-shell .section-heading h3 {font-size:16px;letter-spacing:-.015em;color:var(--text)}
+.app-shell .section-heading p {font-size:12px;color:var(--muted);line-height:1.8}
+.app-shell .eyebrow.muted {color:var(--muted);font-size:9px;font-weight:550;letter-spacing:1.35px}
+.app-shell .micro-copy,.app-shell .metric-note,.app-shell .page-footer {color:var(--muted);font-size:11px}
+.app-shell .metric-top {font-size:12px;color:var(--muted)}
+.app-shell .metric-top>svg {width:28px;height:28px;padding:6px;background:var(--accent-soft);border-radius:8px;color:var(--accent)}
+.app-shell .metric-card:nth-child(3) .metric-top>svg {color:#a17b44;background:#a17b4410}
+.app-shell .metric-card:nth-child(4) .metric-top>svg {color:#668ab3;background:#668ab313}
+.app-shell.dark-mode .metric-card:nth-child(3) .metric-top>svg {color:#d5b27b;background:#d5b27b10}
+.app-shell.dark-mode .metric-card:nth-child(4) .metric-top>svg {color:#97b8dd;background:#97b8dd10}
+.app-shell .metric-number {color:var(--text);font-size:32px;font-weight:550;letter-spacing:-.8px;margin-top:9px;line-height:1.45}
+.app-shell .metric-note {font-size:11px;margin-top:5px}
+.app-shell .badge {border-radius:7px;font-size:10px;background:var(--surface-raised);border-color:var(--line);color:var(--muted)}
+.app-shell .badge.success {color:var(--accent);background:var(--accent-soft);border-color:var(--accent-strong)}
+.app-shell .badge.subtle,.app-shell .badge.purple {color:var(--accent);background:var(--accent-soft);border:1px solid transparent}
+.app-shell .count-badge {color:var(--accent);background:var(--accent-soft);font-variant-numeric:tabular-nums}
+.app-shell .service-info strong {font-size:13px;color:var(--text);font-weight:550}
+.app-shell .service-info>span,.app-shell .latency {font-size:11px;color:var(--muted)}
+.app-shell .service-logo {border:1px solid rgba(var(--accent-rgb),.10);background:var(--accent-soft);color:var(--accent)}
+.app-shell .service-logo.logo-1,.app-shell .service-logo.logo-3 {background:#8b74b313;border-color:#8b74b321;color:#9176b6}
+.app-shell.dark-mode .service-logo.logo-1,.app-shell.dark-mode .service-logo.logo-3 {background:#b59bd316;border-color:#b59bd323;color:#c1a6e0}
+.app-shell .route-node strong {color:var(--text);font-size:12px}
+.app-shell .route-node small {color:var(--muted);font-size:10px}
+.app-shell .route-icon {background:var(--surface-raised);border-color:var(--line);color:var(--accent)}
+.app-shell .connection-path>.micro-copy {border-color:var(--line);color:var(--muted)}
+
+/* Hero: a restrained mesh, soft light and a diagram tied to connection state. */
+.app-shell .hero {padding:34px 36px;border-radius:20px;isolation:isolate;border-color:var(--accent-strong)}
+.app-shell .network-hero {background:radial-gradient(ellipse at 90% 35%,#c9e9de8c,transparent 68%),linear-gradient(120deg,#ebf5f0,#f2f8f4)}
+.app-shell .quota-hero {background:radial-gradient(ellipse at 95% 20%,#e5d8f5c0,transparent 60%),linear-gradient(120deg,#f2edf8,#f7f4fb)}
+.app-shell.dark-mode .network-hero {background:radial-gradient(ellipse at 95% 30%,#365b4e72,transparent 68%),linear-gradient(120deg,#1a2c2b,#1b302e);border-color:#385348}
+.app-shell.dark-mode .quota-hero {background:radial-gradient(ellipse at 95% 20%,#51436870,transparent 65%),linear-gradient(120deg,#27263a,#302b43);border-color:#4c415f}
+.app-shell .hero::before {content:'';position:absolute;z-index:-1;pointer-events:none;width:330px;height:330px;right:7%;top:-120px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-rgb),.09),transparent 72%);animation:ambient-drift 18s ease-in-out infinite alternate}
+.app-shell .network-hero::after {content:'';position:absolute;z-index:-1;pointer-events:none;inset:0;width:auto;height:auto;border:0;border-radius:0;box-shadow:none;background-image:linear-gradient(rgba(var(--accent-rgb),.055) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--accent-rgb),.055) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(90deg,transparent 42%,#000 100%)}
+.app-shell .hero h2 {font-size:35px;font-weight:600;line-height:1.45;letter-spacing:-.04em;color:#203f37}
+.app-shell .hero h2 span {color:#528372}
+.app-shell .hero p {font-size:13px;color:#597c6e;line-height:1.9}
+.app-shell .hero-footnote {font-size:10px;color:#647f74}
+.app-shell.dark-mode .hero h2 {color:#def0e8}
+.app-shell.dark-mode .hero h2 span {color:#9dcab6}
+.app-shell.dark-mode .hero p,.app-shell.dark-mode .hero-footnote {color:#a1bfb1}
+.app-shell .quota-hero h2 {font-size:29px;color:#49375d}
+.app-shell .quota-hero h2 span {color:#8e70ad}
+.app-shell .quota-hero p {font-size:12px;color:#82718f}
+.app-shell.dark-mode .quota-hero h2 {color:#e7dcf6}
+.app-shell.dark-mode .quota-hero h2 span {color:#bfa7db}
+.app-shell.dark-mode .quota-hero p {color:#b8a9c9}
+.app-shell .network-art {height:232px;min-width:240px}
+.app-shell .topology-lines {position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.app-shell .topology-rail {stroke:rgba(var(--accent-rgb),.23);stroke-width:1.1;fill:none}
+.app-shell .topology-flow {stroke:var(--accent);stroke-width:1.6;stroke-dasharray:4 70;stroke-linecap:round;fill:none;animation:topology-flow 5s linear infinite;opacity:.65}
+.app-shell .topology-lines circle {fill:var(--accent);opacity:.35}
+.app-shell .network-core {width:86px;height:86px;border-radius:23px;rotate:0deg;transform:translate(-50%,-50%);background:linear-gradient(145deg,#357b66,#206250);border:1px solid #75af9a75;box-shadow:0 12px 30px #1d493b14,inset 0 1px #d7f8e52e;color:#ddf4e9}
+.app-shell.dark-mode .network-core {background:linear-gradient(145deg,#315f53,#244b42);border-color:#699a834f;box-shadow:0 14px 32px #030d1426,inset 0 1px #d7f8e51a}
+.app-shell .network-core svg {width:33px;height:33px}
+.app-shell .network-core span {font-size:7px;letter-spacing:1.8px}
+.app-shell .orbit {border-color:rgba(var(--accent-rgb),.10)}
+.app-shell .orbit-one {width:130px;height:130px}
+.app-shell .orbit-two {width:194px;height:194px;border-style:solid}
+.app-shell .orbit-three {width:258px;height:258px;border-style:dashed;border-color:rgba(var(--accent-rgb),.07)}
+.app-shell .is-active .orbit-two {animation:none}
+.app-shell .satellite {background:#fbfefbd9;border:1px solid #bcd7c7aa;border-radius:10px;box-shadow:0 4px 12px #20403207;rotate:0deg;animation:satellite-drift 9s ease-in-out infinite;backdrop-filter:none}
+.app-shell .sat-top {top:22px;left:0}
+.app-shell .sat-bottom {bottom:26px;right:0;animation-delay:-4s}
+.app-shell.dark-mode .satellite {background:#243d36ed;border-color:#4e6c5d77;color:#c9e1d4}
+.app-shell .art-caption {font-size:9px;color:var(--muted)}
+.app-shell .quota-hero-symbol {color:var(--accent);opacity:.45;position:relative}
+.app-shell .quota-hero-symbol::before {content:'';position:absolute;width:135px;height:135px;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid rgba(var(--accent-rgb),.18);border-radius:50%;box-shadow:0 0 0 24px rgba(var(--accent-rgb),.035)}
+
+/* Focus, click and selection share the same visual grammar. */
+.app-shell .btn {border-radius:10px;min-height:41px;font-size:12px;font-weight:550;transition:background .18s,border-color .18s,box-shadow .18s,transform .18s var(--ease-out)}
+.app-shell .btn.primary {background:linear-gradient(180deg,rgba(var(--accent-rgb),.94),var(--accent));border-color:var(--accent);box-shadow:0 3px 7px rgba(var(--accent-rgb),.10),inset 0 1px #ffffff1a;color:#fff}
+.app-shell.dark-mode .btn.primary {color:#122b26;box-shadow:0 3px 10px #020d141c,inset 0 1px #ffffff22}
+.app-shell.dark-mode.theme-quota .btn.primary {color:#2b2039}
+.app-shell.dark-mode.theme-team .btn.primary {color:#112b3b}
+.app-shell .btn.primary:hover:not(:disabled) {background:var(--accent-dark);transform:translateY(-1px);box-shadow:0 5px 12px rgba(var(--accent-rgb),.15)}
+.app-shell .btn.secondary,.app-shell .export-button,.app-shell .theme-toggle {background:var(--surface);border:1px solid var(--line);color:var(--text);box-shadow:0 1px 2px #15283c04}
+.app-shell .btn.secondary:hover:not(:disabled),.app-shell .export-button:hover:not(:disabled),.app-shell .theme-toggle:hover:not(:disabled) {background:var(--surface-raised);border-color:var(--accent-strong)}
+.app-shell .btn.ghost {color:var(--accent)}
+.app-shell .btn:active:not(:disabled) {transform:translateY(0) scale(.985);box-shadow:none}
+.app-shell .theme-toggle {border-radius:10px}
+.app-shell .segmented {background:var(--surface-input);border-color:var(--line)}
+.app-shell .segmented button {color:var(--muted);font-size:12px;transition:background .2s,color .2s,box-shadow .2s}
+.app-shell .segmented button.selected {background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.10),0 1px 2px #10203305}
+.app-shell select,.app-shell textarea,.app-shell .team-workspace input,.app-shell .profile-create input,.app-shell .number-input,.app-shell .input-with-prefix {background:var(--surface-input);border-color:var(--line);color:var(--text)}
+.app-shell .number-input input,.app-shell .guard-settings .number-input input {color:var(--text)}
+.app-shell .field-label {color:var(--text);font-size:12px}
+.app-shell .field-label>span,.app-shell .slider-row span,.app-shell .guard-settings .micro-copy {color:var(--muted)}
+.app-shell .number-input:focus-within,.app-shell .input-with-prefix:focus-within {border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.08)}
+.app-shell .preset-card {box-shadow:var(--card-shadow);border-color:var(--line)}
+.app-shell .preset-card.selected {background:linear-gradient(145deg,var(--accent-soft),var(--surface));border-color:var(--accent-strong);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.12)}
+.app-shell .preset-card:hover:not(:disabled) {transform:translateY(-1px);border-color:var(--accent-strong);box-shadow:0 7px 18px #10253709}
+.app-shell .preset-heading strong {font-size:14px}
+.app-shell .preset-description {font-size:12px;line-height:1.9}
+.app-shell .provider-option {background:var(--surface-input);border-color:var(--line);color:var(--text)}
+.app-shell .provider-option.selected {background:var(--accent-soft);border-color:var(--accent-strong);color:var(--accent)}
+
+/* Charts and help stay part of the same surface, without ornamental shadows. */
+.app-shell .quality-track {stroke:var(--line)}
+.app-shell .quality-value {stroke:var(--accent)}
+.app-shell .quality-body dd,.app-shell .quality-ring strong {color:var(--text)}
+.app-shell .network-axes path,.app-shell .chart-grid-lines path {stroke:var(--line)}
+.app-shell .network-axes text,.app-shell .chart-grid-lines text {fill:var(--muted)}
+.app-shell .usage-flow-path {filter:none;stroke-width:2.4}
+.app-shell .usage-dot {stroke:var(--surface)}
+.app-shell .chart-tooltip {background:var(--surface);border-color:var(--line);color:var(--muted);box-shadow:0 6px 22px #06132416;border-radius:9px;font-size:10px}
+.app-shell .chart-tooltip strong {color:var(--accent);font-size:11px}
+.app-shell .personal-total>span,.app-shell .chart-caption {color:var(--muted)}
+.app-shell .progress-track {background:rgba(var(--accent-rgb),.10)}
+.app-shell .progress-track>div {background:linear-gradient(90deg,var(--accent-dark),var(--accent))}
+.app-shell .scope-note {background:rgba(var(--accent-rgb),.035);border-color:var(--accent-strong)}
+.app-shell .scope-note strong {color:var(--text)}
+.app-shell .scope-note p,.app-shell .setting-switch-row small {color:var(--muted)}
+.app-shell .setting-switch-row strong,.app-shell .account-identity strong {color:var(--text)}
+.app-shell .quota-number {color:var(--accent)}
+.app-shell .quota-number small,.app-shell .gauge-caption,.app-shell .freshness {color:var(--muted)}
+.app-shell .jsonl-guide,.app-shell .workspace-guide {background:rgba(var(--accent-rgb),.025);border-color:var(--line)}
+.app-shell .jsonl-guide-title strong,.app-shell .workspace-help-title strong {font-size:12px}
+.app-shell .notice.neutral {background:var(--surface-raised);border-color:var(--line);color:var(--muted)}
+.app-shell .empty-icon {background:var(--surface-raised);border-color:var(--line);box-shadow:none;color:var(--accent)}
+.app-shell .empty-state>strong {color:var(--text);font-size:13px}
+.app-shell .empty-state p {color:var(--muted);font-size:12px;line-height:1.9}
+.app-shell .task-composer {padding-top:22px;border-color:var(--line)}
+.app-shell .directory-button {padding:14px 16px;min-height:54px;border:1px solid var(--line);border-radius:11px;color:var(--text);background:var(--surface-input);font-size:12px;gap:12px;transition:border-color .2s,background .2s}
+.app-shell .directory-button:hover:not(:disabled) {border-color:var(--accent-strong);background:rgba(var(--accent-rgb),.04)}
+.app-shell .directory-button>svg:first-child {color:var(--accent)}
+.app-shell .directory-button>span {min-width:0;overflow-wrap:anywhere;line-height:1.8;text-align:left}
+.app-shell .event-dot {border:1px solid var(--line);background:var(--surface-raised);color:var(--muted)}
+.app-shell .event-list li p {color:var(--text);font-size:12px}
+.app-shell .toast-message {border-color:var(--line);background:var(--surface);color:var(--text);border-radius:13px;box-shadow:0 12px 36px #07122524}
+.app-shell .toast-message.error {border-color:#a47a4d55}
+
+/* Movement uses opacity/transform; system and in-app motion switches remain authoritative. */
+.app-shell .metric-card {animation:surface-arrive .42s var(--ease-out) both}
+.app-shell .metric-card:nth-child(2) {animation-delay:35ms}
+.app-shell .metric-card:nth-child(3) {animation-delay:70ms}
+.app-shell .metric-card:nth-child(4) {animation-delay:105ms}
+.page-enter-active {transition:opacity .24s ease,transform .24s var(--ease-out)}
+.page-leave-active {transition:opacity .12s ease,transform .12s ease}
+.page-enter-from {opacity:0;transform:translateY(7px)}
+.page-leave-to {opacity:0;transform:translateY(-3px)}
+@keyframes surface-arrive {from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ambient-drift {from{transform:translate3d(-12px,0,0)}to{transform:translate3d(20px,24px,0)}}
+@keyframes satellite-drift {0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes topology-flow {to{stroke-dashoffset:-148}}
+
+@media(max-width:1170px) {
+  .app-shell .hero {padding:29px}
+  .app-shell .hero h2 {font-size:32px}
+  .app-shell .quota-hero h2 {font-size:26px}
+  .app-shell .network-art {min-width:200px}
+}
+@media(max-width:940px) {
+  .app-shell .sidebar {border-right-color:#253440}
+  .app-shell .metric-number {font-size:30px}
+  .app-shell .hero h2 {font-size:30px}
+  .app-shell .quota-hero h2 {font-size:25px}
+  .app-shell .network-art {min-width:175px}
+}
+@media(max-width:700px) {
+  .app-shell .sidebar {background:#14232c;border-right:0;border-bottom:1px solid #283a45}
+  .app-shell .nav-item.active::after {top:auto;bottom:0;left:35%;right:35%;height:2px;width:auto}
+  .app-shell .workspace-page {gap:18px}
+  .app-shell .hero {padding:25px}
+  .app-shell .hero h2 {font-size:29px}
+  .app-shell .hero p {font-size:12px}
+  .app-shell .quota-hero h2 {font-size:25px}
+  .app-shell .quota-hero p {font-size:12px}
+  .app-shell .hero-footnote {font-size:10px}
+  .app-shell .metric-number {font-size:28px}
+  .app-shell .metric-top {font-size:11px}
+  .app-shell .metric-note {font-size:10px}
+  .app-shell .section-heading h3 {font-size:15px}
+  .app-shell .section-heading p {font-size:11px}
+  .app-shell .micro-copy,.app-shell .page-footer {font-size:10px}
+  .app-shell .network-art {display:none}
+  .app-shell .service-info strong {font-size:12px}
+  .app-shell .service-info>span,.app-shell .latency {font-size:10px}
+  .app-shell .segmented button {font-size:11px}
+}
+@media(hover:none) {
+  .app-shell .panel::after,.app-shell .metric-card::after,.app-shell .service-card::after {display:none}
+  .app-shell .preset-card:hover:not(:disabled),.app-shell .btn.primary:hover:not(:disabled) {transform:none}
+}
+@media(prefers-reduced-motion:reduce) {
+  .app-shell *, .app-shell *::before, .app-shell *::after {animation:none!important;transition:none!important}
+}
+
+@media(max-width:700px){.app-shell .sidebar nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:3px}.app-shell .sidebar{padding-left:9px;padding-right:9px}.app-shell .nav-item>span:not(.nav-live){font-size:9px}}
+
+.resume-target-field{grid-column:1/-1;margin-bottom:18px}.resume-target-field select{display:block;width:100%;margin-top:8px}.thread-control-error{flex-basis:100%;color:var(--muted);font-size:11px;line-height:1.8}

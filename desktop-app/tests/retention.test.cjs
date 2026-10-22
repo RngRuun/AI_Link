@@ -1,0 +1,10 @@
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const {createRetention}=require('../electron/retention.cjs');
+const {validateCommand}=require('../electron/policy.cjs');
+function fixture(response=0){const calls=[];const api=createRetention({send:async(m,p)=>{calls.push([m,p]);if(m==='storage.purge.preview')return {token:'private-token',count:1,names:['Synthetic chat'],warning:'Permanent',preserved:'C:/fixture/results'};if(m==='storage.cloud.target')return {url:'https://chatgpt.com/'};if(m==='storage.location')return {path:'C:/fixture/state'};return {}},choose:async()=>({canceled:true}),confirm:async()=>({response}),openPath:async()=>'',openExternal:async url=>calls.push(['open',url]),clearCache:async()=>calls.push(['clearCache']),cacheSize:async()=>100});return {api,calls}}
+test('cancel permanent cleanup never reaches delete command',async()=>{const {api,calls}=fixture();assert.equal(await api.purge('a'.repeat(32)),null);assert.equal(calls.length,1)});
+test('permanent cleanup uses native-reviewed backend plan token',async()=>{const {api,calls}=fixture(1);await api.purge('a'.repeat(32));assert.deepEqual(calls[1],['storage.purge',{token:'private-token'}])});
+test('renderer cannot bypass native import path or permanent confirmation',()=>{for(const m of ['storage.purge','storage.purge.preview','storage.import','storage.location','storage.cloud.target'])assert.throws(()=>validateCommand(m,{}))});
+test('cancelled import never reads a file and bad location is rejected',async()=>{const {api,calls}=fixture();assert.equal(await api.importCloud('Personal'),null);await assert.rejects(api.location('C:/secret'));assert.equal(calls.length,0)});
+test('cloud handoff accepts only imported opaque IDs and official origin',async()=>{const {api,calls}=fixture();await assert.rejects(api.cloud('https://malicious.example'));await api.cloud();assert.deepEqual(calls.at(-1),['open','https://chatgpt.com/'])});
+test('cache clearing uses HTTP resource cache only',async()=>{const {api,calls}=fixture();await api.cache(true);assert.deepEqual(calls,[['clearCache']])});

@@ -1,0 +1,19 @@
+/* One hover layer, anchored once on entry. No gradient swap or moving hit target. */
+.app-shell .btn,.app-shell .icon-button,.app-shell .text-button {position:relative;isolation:isolate;overflow:hidden;--wave-color:var(--accent-soft);transition:border-color .32s,color .32s,box-shadow .32s,opacity .18s}
+.app-shell .btn::before,.app-shell .icon-button::before,.app-shell .text-button::before {content:'';position:absolute;inset:-1px;z-index:-1;pointer-events:none;border-radius:inherit;background:var(--wave-color);clip-path:circle(0px at var(--wave-x,50%) var(--wave-y,50%));transition:clip-path .55s cubic-bezier(.2,.65,.25,1)}
+.app-shell .btn:not(:disabled):is(.wave-hover,:focus-visible)::before,.app-shell .icon-button:not(:disabled):is(.wave-hover,:focus-visible)::before,.app-shell .text-button:not(:disabled):is(.wave-hover,:focus-visible)::before {clip-path:circle(var(--wave-radius,150%) at var(--wave-x,50%) var(--wave-y,50%))}
+.app-shell .wave-reset::before {transition:none!important}
+.app-shell .btn::after {display:none}
+.app-shell .btn.primary {--wave-color:var(--accent-dark);background:var(--accent);box-shadow:inset 0 1px #ffffff18,0 2px 6px rgba(var(--accent-rgb),.08)}
+.app-shell .btn.primary:hover:not(:disabled),.app-shell .btn.primary:active:not(:disabled) {background:var(--accent);transform:none;box-shadow:inset 0 1px #ffffff18,0 2px 6px rgba(var(--accent-rgb),.08)}
+.app-shell .btn.secondary:hover:not(:disabled),.app-shell .export-button:hover:not(:disabled),.app-shell .theme-toggle:hover:not(:disabled) {background:var(--surface);transform:none}
+.app-shell .btn.ghost:hover:not(:disabled),.app-shell .icon-button:not(.theme-toggle):hover:not(:disabled),.app-shell .text-button:hover:not(:disabled) {background:transparent;transform:none}
+.app-shell .btn:active:not(:disabled) {transform:none}
+.app-shell .theme-toggle[aria-busy=true] {opacity:1;cursor:progress}
+/* Crossfade whole, fully-resolved themes instead of a fast-edged circle and two color transitions. */
+.theme-snapshot *, .theme-snapshot *::before, .theme-snapshot *::after {transition:none!important}
+::view-transition-group(root) {animation-duration:.62s}
+::view-transition-old(root) {animation:none;opacity:1;mix-blend-mode:normal}
+::view-transition-new(root) {animation:theme-soft-in .62s cubic-bezier(.3,0,.2,1) both;mix-blend-mode:normal;clip-path:none}
+@keyframes theme-soft-in {from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce) {::view-transition-old(root),::view-transition-new(root){animation:none!important}.app-shell .btn::before,.app-shell .icon-button::before,.app-shell .text-button::before{transition:none}}

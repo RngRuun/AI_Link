@@ -1,0 +1,31 @@
+{
+  "name": "ai-link-desktop",
+  "productName": "AI Link",
+  "version": "0.13.0",
+  "private": true,
+  "type": "module",
+  "description": "AI user experience desktop control center",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "package": "node scripts/package.cjs",
+    "test:ui": "node scripts/test-render.cjs"
+  },
+  "dependencies": {
+    "vue": "3.5.44"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "6.0.10",
+    "electron": "45.0.0",
+    "rcedit": "5.0.2",
+    "typescript": "5.9.3",
+    "vite": "8.3.5",
+    "vue-tsc": "3.3.13"
+  },
+  "engines": {
+    "node": ">=22.20.0",
+    "npm": ">=10.9.0"
+  }
+}

@@ -1,0 +1,16 @@
+[project]
+name = "ai-experience-network"
+version = "0.13.0"
+description = "Local Windows network control plane for AI user experience optimization"
+requires-python = ">=3.11"
+dependencies = ["websocket-client==1.9.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["ailink*"]

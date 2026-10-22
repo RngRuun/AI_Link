@@ -1,0 +1,45 @@
+/* 0.13: layered light, bounded movement and legible instrument surfaces. */
+.app-shell{--card-shadow:0 8px 25px #23374f05,0 1px 2px #23374f03}
+.app-shell.dark-mode{--canvas:#0c1422;--canvas-end:#101c2d;--surface:#172333;--surface-raised:#1b2a3e;--surface-input:#101c2c;--line:#2b3d54;--text:#e5edf9;--muted:#a4b4ca;--card-shadow:0 12px 32px #02071318,inset 0 1px #e0edff04}
+.app-shell .main-workspace{position:relative;isolation:isolate}
+.app-shell .main-workspace::before{opacity:.6}
+.app-shell .workspace-header,.app-shell .page-scroll{position:relative;z-index:1}
+.app-shell .workspace-header{border-bottom:1px solid rgba(var(--accent-rgb),.1);background:linear-gradient(180deg,var(--canvas),color-mix(in srgb,var(--canvas) 91%,transparent));isolation:isolate}
+.app-shell .workspace-header::after{content:'';position:absolute;bottom:-1px;left:7%;width:36%;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.5),transparent);animation:header-signal 15s ease-in-out infinite;pointer-events:none}
+.app-shell .workspace-header h1{font-size:30px;letter-spacing:-.045em;line-height:1.3}
+.app-shell .breadcrumb{font-size:10px;letter-spacing:.07em}
+.app-shell .workspace-header p{line-height:1.8}
+.app-shell .page-scroll{scrollbar-gutter:stable}
+.app-shell .panel,.app-shell .metric-card,.app-shell .service-card{background:linear-gradient(155deg,color-mix(in srgb,var(--surface) 97%,var(--accent-soft)),var(--surface));box-shadow:var(--card-shadow);border-color:var(--line)}
+.app-shell .panel::after{background:radial-gradient(330px circle at var(--hover-x,50%) var(--hover-y,50%),rgba(var(--accent-rgb),.07),transparent 78%);opacity:0;transition:opacity .55s ease}
+.app-shell .panel:hover::after{opacity:1}
+.app-shell .hero,.app-shell .storage-hero,.app-shell .team-space-heading{background:radial-gradient(ellipse at 95% 5%,rgba(var(--accent-rgb),.16),transparent 61%),linear-gradient(118deg,var(--accent-soft),var(--surface));border-color:var(--accent-strong);box-shadow:inset 0 1px #ffffff12,0 12px 36px rgba(var(--accent-rgb),.04)}
+.app-shell .hero::before{background:radial-gradient(circle,rgba(var(--accent-rgb),.2),transparent 70%);animation:hero-atmosphere 16s ease-in-out infinite alternate}
+.app-shell .section-heading h3{font-weight:600;line-height:1.55}
+.app-shell .metric-number,.app-shell .quota-number,.app-shell .storage-metrics strong{font-variant-numeric:tabular-nums;letter-spacing:-.05em}
+.app-shell .metric-card{position:relative;overflow:hidden}
+.app-shell .metric-card::after{content:'';position:absolute;inset:auto 20px 0;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.45),transparent);pointer-events:none}
+.app-shell .sidebar{background:radial-gradient(ellipse at 0 0,#2d677b12,transparent 65%),linear-gradient(180deg,#111e2b,#101a26)}
+.app-shell .nav-item{min-height:45px}
+.app-shell .nav-item:hover{box-shadow:inset 0 0 0 1px #a6c5ed12,0 0 20px #7da7d008}
+.app-shell .nav-item.active{border-radius:11px}
+.app-shell .brand-mark{box-shadow:inset 0 1px #d8ffee15,0 0 25px #77e3bd0c}
+.app-shell .directory-intro{padding:10px 2px 15px}
+.app-shell .directory-intro h2{font-size:34px;letter-spacing:-.05em}
+.app-shell .directory-card{border-radius:17px;background:radial-gradient(ellipse at 90% 0,rgba(var(--card-rgb),.085),transparent 70%),linear-gradient(150deg,var(--surface-raised),var(--surface));box-shadow:var(--card-shadow);min-height:215px}
+.app-shell .directory-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(300px circle at var(--hover-x,70%) var(--hover-y,20%),rgba(var(--card-rgb),.09),transparent 70%);opacity:0;transition:opacity .5s;pointer-events:none}
+.app-shell .directory-card:hover::before{opacity:1}
+.app-shell .directory-symbol{box-shadow:inset 0 1px #ffffff12,0 6px 22px rgba(var(--card-rgb),.04)}
+.app-shell .directory-card>strong{font-size:19px;letter-spacing:-.02em}
+.app-shell .directory-enter{padding-top:8px;border-top:1px solid var(--line);font-weight:500}
+.app-shell .connection-badge i.online{animation:status-breathe 4.5s ease-in-out infinite}
+.app-shell .progress-track>span,.app-shell .slider-row input{transition:width .5s cubic-bezier(.2,.7,.2,1)}
+.app-shell.reduced-motion *,.app-shell.reduced-motion *::before,.app-shell.reduced-motion *::after{animation:none!important;scroll-behavior:auto!important}
+.app-shell.reduced-motion .panel::after,.app-shell.reduced-motion .directory-card::before{transition:none}
+@keyframes header-signal{0%,100%{transform:translateX(-12%);opacity:.35}50%{transform:translateX(95%);opacity:.85}}
+@keyframes hero-atmosphere{from{transform:translate3d(12px,-12px,0) scale(.9);opacity:.5}to{transform:translate3d(-34px,24px,0) scale(1.12);opacity:.95}}
+@keyframes status-breathe{0%,100%{box-shadow:0 0 0 3px #46ac9018,0 0 6px #46ac9010}50%{box-shadow:0 0 0 5px #46ac9008,0 0 14px #46ac9024}}
+@media(min-width:1500px){.app-shell .workspace-page{max-width:1440px;margin-inline:auto}.app-shell .workspace-header{padding-block:30px}.app-shell .panel{padding:27px}.app-shell .section-heading{margin-bottom:22px}}
+@media(max-width:940px){.app-shell .workspace-header h1{font-size:27px}.app-shell .directory-intro h2{font-size:29px}}
+@media(max-width:700px){.app-shell .workspace-header h1{font-size:23px}.app-shell .sidebar nav{display:flex;flex-direction:row;overflow-x:auto;scrollbar-width:none;gap:5px}.app-shell .nav-item{min-width:72px;flex:1 0 72px;width:auto;min-height:52px}.app-shell .nav-item>span:not(.nav-live){font-size:9px}.app-shell .directory-intro h2{font-size:25px}.app-shell .directory-card{min-height:205px}.app-shell .workspace-header::after{width:45%}}
+@media(prefers-reduced-motion:reduce){.app-shell *,.app-shell *::before,.app-shell *::after{animation:none!important;scroll-behavior:auto!important}}

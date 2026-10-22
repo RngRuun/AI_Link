@@ -1,0 +1,12 @@
+<script setup lang="ts">
+import Icon from './Icon.vue'
+import type {QuotaState} from './types'
+defineProps<{quota:QuotaState;busy:string}>()
+const emit=defineEmits<{action:[method:string,params:Record<string,unknown>,message:string]}>()
+const time=(value?:number)=>value?new Date(value*1000).toLocaleTimeString('zh-CN',{hour12:false}):'等待首次采集'
+</script>
+<template><section class="panel personal-source-panel"><div class="section-heading"><div><span class="eyebrow muted">AUTOMATIC OBSERVATION</span><h3>本机会话自动采集</h3><p>每 2 分钟读取新增或变化的 JSONL，用量自动绘入下方曲线。</p></div><button class="switch" role="switch" :class="{on:quota.source?.enabled}" :aria-checked="!!quota.source?.enabled" aria-label="自动采集个人 JSONL 用量" :disabled="!!busy" @click="emit('action','quota.source.configure',{enabled:!quota.source?.enabled},quota.source?.enabled?'自动采集已暂停。':'自动采集已开启。')"><span></span></button></div><div class="source-status"><span class="status-dot" :class="{live:quota.source?.enabled}"></span><span>{{ quota.source?.running?'正在读取会话记录…':quota.source?.enabled?'每 2 分钟自动更新':'自动采集已暂停' }}</span><span>上次更新 {{ time(quota.source?.updated) }}</span><span>{{ quota.source?.files || 0 }} 份近期记录</span><button class="text-button" :disabled="!!busy || !quota.source?.enabled || quota.source?.running" @click="emit('action','quota.source.refresh',{},'已安排立即更新个人用量。')"><Icon name="refresh" :size="15"/>立即更新</button></div><code class="source-directory">{{ quota.source?.root || '本机 CODEX_HOME / sessions' }}</code><p class="micro-copy">按当前已保存的档案和计划归类；已归属或重复计数不重复增加。此来源代表当前设备日志，同一日志目录由多人混用时无法自动识别具体输入者。</p><div v-if="quota.source?.error" class="notice warning"><Icon name="info" :size="17"/><span>本次自动采集未完成：{{ quota.source.error }}</span></div></section></template>
+<style scoped>
+.personal-source-panel{min-width:0}.source-status{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;color:var(--muted);font-size:11px;line-height:1.8}.source-status>.text-button{margin-left:auto}.source-directory{display:block;font:11px/1.9 Consolas,monospace;overflow-wrap:anywhere;color:var(--text);background:var(--surface-input);border:1px solid var(--line);padding:11px 13px;border-radius:9px;margin:14px 0}.personal-source-panel>.notice{margin-top:15px}.personal-source-panel>.micro-copy{margin-top:12px}
+@media(max-width:700px){.source-status{gap:9px 12px}.source-status>.text-button{margin-left:0}.personal-source-panel>.section-heading{align-items:start}}
+</style>
