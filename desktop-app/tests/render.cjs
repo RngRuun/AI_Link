@@ -58,7 +58,10 @@ app.whenReady().then(async()=>{
   ipcMain.handle('imports:drop',(_e,paths,context)=>{native.push({method:'drop',paths,context});return {files:1,tokens:25,skipped:0,malformed:0}});
   win=new BrowserWindow({show:false,width:1440,height:1000,webPreferences:{preload:path.join(root,'electron/preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true,offscreen:true,backgroundThrottling:false}});
   await win.webContents.session.clearStorageData();win.webContents.on('console-message',details=>{if(details.level==='error')errors.push(details.message)});
-  await win.loadURL('ailink://app/index.html');await waitFor('.directory-page');await nav('network');await js("document.querySelector('.motion-button').click()");
+  await win.loadURL('ailink://app/index.html');
+  win.webContents.debugger.attach('1.3');
+  await win.webContents.debugger.sendCommand('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
+  await waitFor('.directory-page');await nav('network');await js("document.querySelector('.motion-button').click()");
   for(const dark of [false,true]){await theme(dark);for(const [width,height] of [[560,480],[760,600],[1024,800],[1440,1000]]){win.setContentSize(width,height);await delay(60);for(const page of Object.keys(markers)){await nav(page);const result=await geometry();check(`layout ${page} ${width} ${dark}`,!result.rootOverflow&&!result.verticalOverflow&&!result.overflow&&!result.bad.length,result);layouts.push({page,dark,...result})}}}
   for(const page of Object.keys(markers)){await nav(page);await js("document.querySelector('.directory-return').click()");await waitFor('.directory-page');check(`directory return from ${page}`,await js("!!document.querySelector('.directory-page')&&document.querySelectorAll('.directory-card').length===7"))}
   await js("document.querySelector('.page-scroll').scrollTop=500;document.querySelector('.directory-return').click()");await delay(80);check('directory return also resets scroll on the directory itself',await js("document.querySelector('.page-scroll').scrollTop===0"));
@@ -106,10 +109,10 @@ app.whenReady().then(async()=>{
   // Real disk-backed File passes through the actual sandboxed preload/webUtils bridge.
   const fixture=path.join(work,'dropped-fixture.jsonl');await fs.writeFile(fixture,'{"type":"session_meta","payload":{"id":"fixture"}}\n');
   await js("(()=>{const input=document.createElement('input');input.type='file';input.id='drop-fixture-input';input.style.display='none';document.body.append(input)})()");
-  win.webContents.debugger.attach('1.3');const dom=await win.webContents.debugger.sendCommand('DOM.getDocument');const node=await win.webContents.debugger.sendCommand('DOM.querySelector',{nodeId:dom.root.nodeId,selector:'#drop-fixture-input'});await win.webContents.debugger.sendCommand('DOM.setFileInputFiles',{nodeId:node.nodeId,files:[fixture]});
+  const dom=await win.webContents.debugger.sendCommand('DOM.getDocument');const node=await win.webContents.debugger.sendCommand('DOM.querySelector',{nodeId:dom.root.nodeId,selector:'#drop-fixture-input'});await win.webContents.debugger.sendCommand('DOM.setFileInputFiles',{nodeId:node.nodeId,files:[fixture]});
   await js("(()=>{const data=new DataTransfer();data.items.add(document.querySelector('#drop-fixture-input').files[0]);document.querySelector('.import-zone').dispatchEvent(new DragEvent('drop',{bubbles:true,cancelable:true,dataTransfer:data}))})()");await delay(150);
   check('OS-backed dropped file crosses preload without exposing arbitrary paths',native.some(c=>c.method==='drop'&&c.paths[0]===fixture&&c.context.memberId===member));
-  check('forged JavaScript File cannot claim a native path',await js("(async()=>{try{await window.aiLink.importDropped([new File(['x'],'forged.jsonl')],{kind:'personal'});return false}catch{return true}})()"));win.webContents.debugger.detach();
+  check('forged JavaScript File cannot claim a native path',await js("(async()=>{try{await window.aiLink.importDropped([new File(['x'],'forged.jsonl')],{kind:'personal'});return false}catch{return true}})()"));
   win.webContents.send('imports:activity',true);await delay(100);const polls=statusCount;await delay(1700);check('long import suspends background polling',statusCount===polls);check('long import disables conflicting controls',await js("document.querySelector('.import-folder-button').disabled"));win.webContents.send('imports:activity',false);await delay(150);check('polling resumes after import',statusCount>polls);
   // Existing-service connection uses a native credential handle, never a renderer path.
   await nav('quota');await js("(()=>{const e=document.querySelector('#connection-mode');e.selectedIndex=1;e.dispatchEvent(new Event('change',{bubbles:true}))})()");await delay(50);
@@ -169,10 +172,16 @@ app.whenReady().then(async()=>{
   const field=await js("(()=>{const e=document.querySelector('.ambient-field'),r=e.getBoundingClientRect();return {width:e.width,height:e.height,cssWidth:r.width,hidden:e.getAttribute('aria-hidden'),pointer:getComputedStyle(e).pointerEvents,motion:e.dataset.motion,alpha:e.getContext('2d').getImageData(Math.floor(e.width/2),Math.floor(e.height/2),1,1).data[3]}})()");
   check('ambient field paints behind content without intercepting input',field.hidden==='true'&&field.pointer==='none'&&field.alpha>0,field);
   check('ambient resolution is bounded and reduced motion pauses its clock',field.width<=field.cssWidth*1.75+2&&field.motion==='static',field);
-  await js("Object.defineProperty(document,'hidden',{configurable:true,get:()=>false});document.dispatchEvent(new Event('visibilitychange'));document.querySelector('.motion-button').click()");await delay(90);
+  await js("Object.defineProperty(document,'hidden',{configurable:true,get:()=>false});document.dispatchEvent(new Event('visibilitychange'));document.querySelector('.motion-button').click()");await waitFor('.ambient-field[data-motion="running"]');
   check('visible ambient field starts when motion is enabled',await js("document.querySelector('.ambient-field').dataset.motion==='running'"));
+  await win.webContents.debugger.sendCommand('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});await waitFor('.ambient-field[data-motion="static"]');
+  check('system reduced motion pauses the visible ambient field',await js("matchMedia('(prefers-reduced-motion: reduce)').matches&&document.querySelector('.ambient-field').dataset.motion==='static'"));
+  await win.webContents.debugger.sendCommand('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});await waitFor('.ambient-field[data-motion="running"]');
+  check('system motion preference restores the visible ambient field',await js("!matchMedia('(prefers-reduced-motion: reduce)').matches&&document.querySelector('.ambient-field').dataset.motion==='running'"));
   await js("document.querySelector('.motion-button').click()");await delay(50);check('motion switch immediately stops ambient animation',await js("document.querySelector('.ambient-field').dataset.motion==='static'"));
   await js("delete document.hidden;document.dispatchEvent(new Event('visibilitychange'))");
+  await win.webContents.debugger.sendCommand('Emulation.setEmulatedMedia',{features:[]});
+  win.webContents.debugger.detach();
   win.setContentSize(560,700);await delay(70);const compactNav=await js("(()=>{const e=document.querySelector('.sidebar nav'),rows=[...e.children].map(c=>c.getBoundingClientRect().top);return {scrollable:e.scrollWidth>e.clientWidth,sameRow:Math.max(...rows)-Math.min(...rows)<1,count:rows.length}})()");check('compact navigation keeps all destinations in one scrollable row',compactNav.scrollable&&compactNav.sameRow&&compactNav.count===8,compactNav);win.setContentSize(1440,1000);
   const paletteContrast=[];
   function lum(value){if(/^#[0-9a-f]{3}$/i.test(value))value='#'+value.slice(1).split('').map(c=>c+c).join('');const rgb=value.startsWith('#')?[1,3,5].map(i=>parseInt(value.slice(i,i+2),16)):value.match(/[\d.]+/g).slice(0,3).map(Number);return rgb.map(n=>{n/=255;return n<=.04045?n/12.92:((n+.055)/1.055)**2.4}).reduce((s,n,i)=>s+n*[.2126,.7152,.0722][i],0)}
