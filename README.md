@@ -2,7 +2,7 @@
 
 Some useful tools help enhance the using experience of Codex.
 
-「AI 用户体验优化」的 Windows 桌面应用。Vue 3、TypeScript、Electron 前端与 Python 本地服务通过受限 IPC 通信，不启动 HTTP 控制网站。
+「AI 用户体验优化」的 Windows 桌面应用。Vue 3、TypeScript、Electron 前端与 Python 本地服务通过受限 IPC 通信，不启动 HTTP 控制网站，适用于多人共享同一账号的管理。
 
 ![工作空间目录](docs/images/directory-dark.png)
 
