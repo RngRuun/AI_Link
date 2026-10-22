@@ -6,6 +6,10 @@ Some useful tools help enhance the using experience of Codex.
 
 ![工作空间目录](docs/images/directory-dark.png)
 
+## Windows 下载
+
+在 [Releases](https://github.com/RngRuun/AI_Link/releases/latest) 下载 `AI-Link-0.13.0-Windows-Fresh.zip`，完整解压后双击 `AI Link.exe`。请保留同目录的全部资源；免安装版内置运行环境，不需要另装 Python 或 Node。
+
 ## 工作空间
 
 | 功能 | 内容 |

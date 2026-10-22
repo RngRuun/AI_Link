@@ -32,7 +32,7 @@ class LocalRPC:
 
 class StorageTests(unittest.TestCase):
     def setUp(self):
-        self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.base=Path(self.temp.name)
+        self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.base=Path(self.temp.name).resolve()
         self.home=self.base/'codex';self.workspace=self.base/'project';self.workspace.mkdir();(self.home/'sessions').mkdir(parents=True)
         self.quota=Mock();self.quota.data={'threads':{}};self.quota.lock=threading.RLock();self.rpc=LocalRPC(self.home)
         self.storage=StorageCleanup(self.base/'state',self.quota,lambda:self.rpc,home=self.home)
